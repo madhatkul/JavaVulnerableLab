@@ -9,7 +9,7 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
 
       # Step 1: Run Snyk for SCA (Software Composition Analysis)
       - name: Run Snyk to check for vulnerabilities in dependencies (SCA)
