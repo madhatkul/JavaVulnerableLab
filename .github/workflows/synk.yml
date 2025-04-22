@@ -1,18 +1,43 @@
 name: Example workflow for Maven using Snyk
-on: push
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven@master
-        continue-on-error: true # To make sure that SARIF upload gets called
+      # Step 1: Checkout code
+      - uses: actions/checkout@v2
+
+      # Step 2: Run Snyk to check for vulnerabilities in Maven dependencies
+      - name: Run Snyk Maven Vulnerability Scan
+        uses: snyk/actions/maven@v2
+        continue-on-error: true # To ensure the SARIF report gets uploaded even if vulnerabilities are found
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --sarif-file-output=snyk.sarif
+
+      # Step 3: Monitor for Open Source vulnerabilities and dependencies
+      - name: Monitor Open Source Dependencies with Snyk
+        run: snyk monitor --all-projects --org=my-madhatkul # Replace `my-org-name` with your Snyk org name
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      # Step 4: Upload SARIF results to GitHub Code Scanning
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: snyk.sarif
+
+      # Optional: Notify on vulnerability issues (e.g., via Slack, email, or GitHub Issues)
+      - name: Notify if vulnerabilities found
+        if: failure() # Trigger this step only when a vulnerability is found
+        run: |
+          echo "Vulnerabilities found! Check the SARIF report for more details."
