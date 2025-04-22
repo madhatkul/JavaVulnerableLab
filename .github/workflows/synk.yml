@@ -5,6 +5,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+        
       - name: Run Snyk to check for vulnerabilities in dependencies (SCA)
         uses: snyk/actions/maven@master
         continue-on-error: true # To make sure that SARIF upload gets called
