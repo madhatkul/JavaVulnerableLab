@@ -19,6 +19,11 @@ jobs:
         with:
           args: --sarif-file-output=snyk_sca.sarif
 
+      # Step 3: Monitor the project for SCA (Software Composition Analysis)
+      - name: Monitor project in Snyk for dependencies (SCA)
+        run: snyk monitor --all-projects --org=madhatkul
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       
           
        # Step 3: Run Snyk for SAST (Static Application Security Testing)
@@ -28,9 +33,9 @@ jobs:
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-      - name: Monitor project in Snyk for dependencies
-        run: snyk monitor --all-projects
+# Step 5: Monitor the project for SAST (Static Application Security Testing)
+      - name: Monitor project in Snyk for SAST
+        run: snyk monitor --all-projects --org=madhatkul
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
