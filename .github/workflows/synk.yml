@@ -35,7 +35,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 # Step 5: Monitor the project for SAST (Static Application Security Testing)
       - name: Monitor project in Snyk for SAST
-        run: snyk code monitor --all-projects --org=madhatkul
+        run: snyk monitor
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
