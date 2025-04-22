@@ -19,16 +19,18 @@ jobs:
         with:
           args: --sarif-file-output=snyk_sca.sarif
 
-      - name: Monitor project in Snyk for dependencies
-        run: snyk monitor --all-projects
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      
           
        # Step 3: Run Snyk for SAST (Static Application Security Testing)
       - name: Run Snyk SAST to check for vulnerabilities in source code
         run: |
           snyk code test --all-projects --sarif-file-output=snyk_sast.sarif
         continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Monitor project in Snyk for dependencies
+        run: snyk monitor --all-projects
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
