@@ -26,26 +26,21 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       
           
-       # Step 3: Run Snyk for SAST (Static Application Security Testing)
+       # Step 4: Run Snyk for SAST (Static Application Security Testing)
       - name: Run Snyk SAST to check for vulnerabilities in source code
         run: |
           snyk code test --all-projects --sarif-file-output=snyk_sast.sarif
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-# Step 5: Monitor the project for SAST (Static Application Security Testing)
-      - name: Monitor project in Snyk for SAST
-        run: snyk monitor
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-        # Step 4: Upload SCA results to GitHub Code Scanning
+        # Step 5: Upload SCA results to GitHub Code Scanning
       - name: Upload SCA result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk_sca.sarif
 
-       # Step 5: Upload SAST results to GitHub Code Scanning
+       # Step 6: Upload SAST results to GitHub Code Scanning
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
