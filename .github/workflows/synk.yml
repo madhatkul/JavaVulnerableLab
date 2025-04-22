@@ -31,10 +31,10 @@ jobs:
       - name: Upload SCA result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: snyk_sca.sarif
+          sarif_file: snyk.sarif
 
        # Step 5: Upload SAST results to GitHub Code Scanning
-      - name: Upload result to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: snyk.sarif
+      # - name: Upload result to GitHub Code Scanning
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: snyk.sarif
