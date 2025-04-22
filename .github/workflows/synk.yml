@@ -1,24 +1,17 @@
-name: Example workflow for Maven using Snyk
-
-on:
-  push:
-    branches:
-      - master
-
+name: Example workflow using Snyk
+on: push
 jobs:
   security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-
-      # Step 1: Run Snyk for SCA (Software Composition Analysis)
       - name: Run Snyk to check for vulnerabilities in dependencies (SCA)
-        uses: snyk/actions/maven@v2
+        uses: snyk/actions/maven@master
         continue-on-error: true # To make sure that SARIF upload gets called
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --sarif-file-output=snyk_sca.sarif
+          args: --sarif-file-output=snyk.sarif
 
       # Step 2: Run Snyk for SAST (Static Application Security Testing)
       - name: Run Snyk SAST to check for vulnerabilities in source code
@@ -27,14 +20,13 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      # Step 3: Upload SCA results to GitHub Code Scanning
+       # Step 3: Upload SCA results to GitHub Code Scanning
       - name: Upload SCA result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk_sca.sarif
-
-      # Step 4: Upload SAST results to GitHub Code Scanning
-      - name: Upload SAST result to GitHub Code Scanning
+          
+      - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: snyk_sast.sarif
+          sarif_file: snyk.sarif
