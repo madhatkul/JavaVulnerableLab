@@ -34,6 +34,11 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
+      - name: Monitor project in Snyk for dependencies (SAST)
+        run: snyk code monitor --all-projects --org=madhatkul
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
         # Step 5: Upload SCA results to GitHub Code Scanning
       - name: Upload SCA result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
